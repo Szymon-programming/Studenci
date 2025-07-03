@@ -29,8 +29,8 @@ namespace Studenci
             studentService.AddStudent(s7);
             studentService.AddStudent(s8);
 
-            studentService.WriteDwonAllStudents();
-            Console.WriteLine();
+            //studentService.WriteDwonAllStudents();
+            //Console.WriteLine();
 
             //studentService.RemoveStudentByIndex("S009");
 
@@ -45,6 +45,40 @@ namespace Studenci
             //Console.WriteLine(studentService.MiddleStudentsAge());
             //studentService.TheOldestAndYongestStudent();
 
+
+            /* SYSTEM OBSŁUGI STUDENTÓW WERSJA NA 03.07.2025 4 DZIEŃ NAUKI(LINQ, LIST<T>) */
+
+            Console.WriteLine("Wybierz jedną z opcji, co chcesz zrobić: ");
+            Console.WriteLine("1: Wyświetl listę studentów.");
+            Console.WriteLine("2: Dodaj Studenta.");
+            Console.WriteLine("3: Usuń Studenta.");
+            Console.WriteLine("4: Posortuj Studentów po kierunku.");
+            Console.WriteLine("5: Wyjdź.");
+
+            string wybor = Console.ReadLine();
+            switch(wybor)
+            {
+                case "1":
+                    studentService.WriteDwonAllStudents();
+                    break;
+                case "2":
+                    studentService.AddStudent();
+                    break;
+                case "3":
+                    string index;
+                    Console.Write("Podaj indeks studenta do usunięcia z listy studentów: ");
+                    index = Console.ReadLine();
+                    studentService.RemoveStudentByIndex(index);
+                    break;
+                case "4":
+                    Console.WriteLine("Posortowani studenci: ");
+                    studentService.SotrByField();
+                    break;
+                case "5":
+                    return;
+                default: Console.WriteLine("nieprawidłowy wybór!!!");
+                    break;
+            }
         }
     }
 }

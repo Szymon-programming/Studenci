@@ -11,6 +11,28 @@ namespace Studenci
     {
         private List<Student> students = new List<Student>();
 
+        public void AddStudent()
+        {
+            string imie;
+            Console.Write("Podaj imie: ");
+            imie = Console.ReadLine();
+            string nazwisko;
+            Console.Write("Podaj Nazwisko: ");
+            nazwisko = Console.ReadLine();
+            int wiek;
+            Console.Write("Podaj wiek: ");
+            wiek = int.Parse(Console.ReadLine());
+            string kierunek; 
+            Console.Write("Podaj kierunek: ");
+            kierunek = Console.ReadLine();
+            string indeks;
+            Console.Write("Podaj indeks: ");
+            indeks = Console.ReadLine();
+
+            Student student = new Student(imie, nazwisko, wiek, kierunek, indeks);
+
+            students.Add(student);
+        }
         public void AddStudent(Student student)
         {
             if(!students.Contains(student))
@@ -133,5 +155,14 @@ namespace Studenci
             }
         }
 
+        public void SotrByField()
+        {
+            var sorted = students.OrderBy(a => a.FieldOfStudy).ToList();
+
+            foreach (Student student in sorted)
+            {
+                Console.WriteLine(student);
+            }
+        }
     }
 }
