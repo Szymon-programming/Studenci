@@ -16,18 +16,58 @@ namespace Studenci
             string imie;
             Console.Write("Podaj imie: ");
             imie = Console.ReadLine();
+            if(PersonValidator.IsValidName(imie) == false)
+            {
+                Console.WriteLine("Podano złe imie");
+                return;
+            }
             string nazwisko;
             Console.Write("Podaj Nazwisko: ");
             nazwisko = Console.ReadLine();
+            if(PersonValidator.IsValidName(nazwisko) == false)
+            {
+                Console.WriteLine("Podano złe nazwisko");
+                return;
+            }
             int wiek;
             Console.Write("Podaj wiek: ");
             wiek = int.Parse(Console.ReadLine());
+            if(wiek < 16 || wiek > 125)
+            {
+                Console.WriteLine("Podano zły wiek");
+                return;
+            }
             string kierunek; 
             Console.Write("Podaj kierunek: ");
             kierunek = Console.ReadLine();
+            string kierunekWszystkieMale = kierunek.ToLower();
+            switch(kierunekWszystkieMale)
+            {
+                case "informatyka":
+                    kierunek = "Informatyka";
+                    break;
+                case "matematyka":
+                    kierunek = "Matematyka";
+                    break;
+                case "biotechnologia":
+                    kierunek = "Biotechnologia";
+                    break;
+                case "fizyka":
+                    kierunek = "Fizyka";
+                    break;
+                default:
+                    Console.WriteLine("Podano zły kierunek");
+                    return;
+            }
             string indeks;
             Console.Write("Podaj indeks: ");
             indeks = Console.ReadLine();
+            var validator = new IndexValidator();
+            if(validator.TryAddIndex(indeks) == false)
+            {
+                Console.WriteLine("Podano zły indeks");
+                return;
+            }
 
             Student student = new Student(imie, nazwisko, wiek, kierunek, indeks);
 

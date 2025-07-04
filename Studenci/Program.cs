@@ -64,7 +64,7 @@ namespace Studenci
                         Console.WriteLine("5: Wyjdź.");
 
                         Console.Write("Wpisz wybraną opcję [1,2,3,4 lub 5]: ");
-                        string wybor = Console.ReadLine();
+                        string wybor = Console.ReadLine().ToLower();
                         switch (wybor)
                         {
                             case "1":
@@ -92,7 +92,7 @@ namespace Studenci
                                 break;
                         }
                         break;
-                    case "KONIEC":
+                    case "koniec":
                         Console.WriteLine("Zamykanie menu wyboru!");
                         czykoniec = true;
                         break;
@@ -102,6 +102,8 @@ namespace Studenci
                     default : Console.WriteLine("Podano nieprawidłową wartość!");
                         break;
                 }
+
+                
             }
         }
     }
