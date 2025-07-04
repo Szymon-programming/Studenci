@@ -1,5 +1,5 @@
 # StudentManager
-[Projekt w trakcie budowy]
+#[Projekt w trakcie budowy]
 Aplikacja konsolowa w C# do zarządzania listą studentów – dodawanie, filtrowanie, sortowanie, analiza danych z LINQ.
 
 ## Uruchomienie
