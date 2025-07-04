@@ -15,23 +15,6 @@ namespace Studenci
             StudentService studentService = new StudentService();
             studentService.LoadFromJson("students.json", false);
 
-            //studentService.WriteDwonAllStudents();
-            //Console.WriteLine();
-
-            //studentService.RemoveStudentByIndex("S009");
-
-            //studentService.WriteDwonAllStudents();
-            //Console.WriteLine();
-
-            //studentService.RemoveStudentFromDirectField("Informatyka");
-            //studentService.WriteDwonAllStudents();
-            //Console.WriteLine();
-
-            //Console.WriteLine(studentService.HowMuchStudentsWeHave());
-            //Console.WriteLine(studentService.MiddleStudentsAge());
-            //studentService.TheOldestAndYongestStudent();
-
-
             /* SYSTEM OBSŁUGI STUDENTÓW WERSJA NA 04.07.2025 5 DZIEŃ NAUKI(Serjalizacja i Deserializacja) */
 
 

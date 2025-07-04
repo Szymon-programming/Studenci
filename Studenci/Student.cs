@@ -33,7 +33,7 @@ namespace Studenci
 
         public override string ToString()
         {
-            return $"{Name} {Surname} {Age} {FieldOfStudy} {StudentIndex}";
+            return $"[{StudentIndex}] {Name} {Surname} {Age} {FieldOfStudy}";
         }
     }
 }

@@ -201,11 +201,6 @@ namespace Studenci
             }
         }
 
-        public void ChangeStudentData()
-        {
-
-        }
-
         public int HowMuchStudentsWeHave()
         {
             var HowMuch = students.Count();
