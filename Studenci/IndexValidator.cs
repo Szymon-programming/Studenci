@@ -13,9 +13,9 @@ namespace Studenci
 
         public bool TryAddIndex(string index)
         {
-            //Do Poprawy
-            if (!Regex.IsMatch(index, @"S\d{3}$") && Exists(index)) return false; 
-            return usedIndexes.Add(index);
+            if (!Regex.IsMatch(index, @"S\d{3}$")) return false;
+            if (Exists(index)) return false;
+            usedIndexes.Add(index); return true;
         }
 
         public bool Exists(string index)
@@ -26,6 +26,15 @@ namespace Studenci
         public IEnumerable<string> GetAllIndexes()
         {
             return usedIndexes;
+        }
+
+        public void ReturnUsedIndexes()
+        {
+            Console.WriteLine("Zapisane indeksy:");
+            foreach (var index in usedIndexes)
+            {
+                Console.WriteLine(index);
+            }
         }
     }
 }

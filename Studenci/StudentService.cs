@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Studenci
@@ -10,74 +12,110 @@ namespace Studenci
     public class StudentService
     {
         private List<Student> students = new List<Student>();
+        public IndexValidator validator = new IndexValidator();
 
         public void AddStudent()
         {
             string imie;
-            Console.Write("Podaj imie: ");
-            imie = Console.ReadLine();
-            if(PersonValidator.IsValidName(imie) == false)
+            while(true)
             {
-                Console.WriteLine("Podano złe imie");
-                return;
+                Console.Write("Podaj imie: ");
+                imie = Console.ReadLine();
+                if (PersonValidator.IsValidName(imie) == true)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Niepoprawne imie, spóbuj ponownie.");
+                }
             }
             string nazwisko;
-            Console.Write("Podaj Nazwisko: ");
-            nazwisko = Console.ReadLine();
-            if(PersonValidator.IsValidName(nazwisko) == false)
+            while (true)
             {
-                Console.WriteLine("Podano złe nazwisko");
-                return;
+                Console.Write("Podaj Nazwisko: ");
+                nazwisko = Console.ReadLine();
+                if (PersonValidator.IsValidName(nazwisko) == true)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Niepoprawne nazwisko, spóbuj ponownie.");
+                }
             }
             int wiek;
             Console.Write("Podaj wiek: ");
             wiek = int.Parse(Console.ReadLine());
-            if(wiek < 16 || wiek > 125)
+            while (true)
             {
-                Console.WriteLine("Podano zły wiek");
-                return;
+                if (wiek < 10 || wiek > 125)
+                {
+                    Console.WriteLine("Podano zły wiek spróbuj ponownie. ");
+                }
+                else
+                {
+                    break;
+                }
             }
-            string kierunek; 
-            Console.Write("Podaj kierunek: ");
-            kierunek = Console.ReadLine();
-            string kierunekWszystkieMale = kierunek.ToLower();
-            switch(kierunekWszystkieMale)
+            string kierunek;
+            bool poprawny_kierunek = false;
+            do
             {
-                case "informatyka":
-                    kierunek = "Informatyka";
-                    break;
-                case "matematyka":
-                    kierunek = "Matematyka";
-                    break;
-                case "biotechnologia":
-                    kierunek = "Biotechnologia";
-                    break;
-                case "fizyka":
-                    kierunek = "Fizyka";
-                    break;
-                default:
-                    Console.WriteLine("Podano zły kierunek");
-                    return;
+                Console.Write("Podaj kierunek: ");
+                kierunek = Console.ReadLine();
+                string kierunekWszystkieMale = kierunek.ToLower();
+                switch (kierunekWszystkieMale)
+                {
+                    case "informatyka":
+                        kierunek = "Informatyka";
+                        poprawny_kierunek = true;
+                        break;
+                    case "matematyka":
+                        kierunek = "Matematyka";
+                        poprawny_kierunek = true;
+                        break;
+                    case "biotechnologia":
+                        kierunek = "Biotechnologia";
+                        poprawny_kierunek = true;
+                        break;
+                    case "fizyka":
+                        kierunek = "Fizyka";
+                        poprawny_kierunek = true;
+                        break;
+                    default:
+                        Console.WriteLine("Podano zły kierunek, spróbuj ponownie.");
+                        break;
+                }
             }
+            while (!poprawny_kierunek);
             string indeks;
-            Console.Write("Podaj indeks: ");
-            indeks = Console.ReadLine();
-            var validator = new IndexValidator();
-            if(validator.TryAddIndex(indeks) == false)
+            while (true)
             {
-                Console.WriteLine("Podano zły indeks");
-                return;
+                Console.Write("Podaj indeks: ");
+                indeks = Console.ReadLine();
+                if (validator.TryAddIndex(indeks) == true)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Podano zły indeks spróbuj ponownie.");
+                }
             }
 
             Student student = new Student(imie, nazwisko, wiek, kierunek, indeks);
 
             students.Add(student);
+            AutoSave();
         }
         public void AddStudent(Student student)
         {
-            if(!students.Contains(student))
+            if(!students.Contains(student) && validator.TryAddIndex(student.StudentIndex) == true)
             {
+                validator.TryAddIndex(student.StudentIndex);
                 students.Add(student);
+                AutoSave();
             }
             else
             {
@@ -95,6 +133,7 @@ namespace Studenci
                 students.Remove(item);
                 Console.WriteLine($"Usunięto studenta o nmumerze indeksu {index}");
                 howmuch++;
+                AutoSave();
                 break;
             }
             if(howmuch == 0)
@@ -107,6 +146,7 @@ namespace Studenci
         {
             students.RemoveAll(s => s.FieldOfStudy == Field);
             Console.WriteLine($"Usunięto studentów z kierunku: {Field}");
+            AutoSave();
         }
 
         public void FindStudentByName(string name)
@@ -189,10 +229,7 @@ namespace Studenci
 
         public void WriteDwonAllStudents()
         {
-            foreach(Student student in students)
-            {
-                Console.WriteLine(student);
-            }
+            LoadFromJson("students.json", true);
         }
 
         public void SotrByField()
@@ -203,6 +240,37 @@ namespace Studenci
             {
                 Console.WriteLine(student);
             }
+        }
+
+        public void SaveToJson(string path)
+        {
+            var options = new JsonSerializerOptions {WriteIndented = true};
+            string json = JsonSerializer.Serialize(students, options);
+            File.WriteAllText(path, json);
+        }
+
+        public void LoadFromJson(string path, bool doyouWantToWriteDown)
+        {
+            if(File.Exists(path))
+            {
+                string json = File.ReadAllText(path);
+                var loaded = JsonSerializer.Deserialize<List<Student>>(json);
+                if(loaded != null)
+                    students = loaded;
+            }
+
+            if(doyouWantToWriteDown == true)
+            {
+                foreach (var item in students)
+                {
+                    Console.WriteLine(item);
+                }
+            }
+        }
+
+        public void AutoSave()
+        {
+            SaveToJson("students.json");
         }
     }
 }
