@@ -5,7 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Studenci
+namespace Studenci.Models
 {
     public abstract class Student
     {
@@ -21,6 +21,8 @@ namespace Studenci
         public string FieldOfStudy { get => fieldOfStudy; set => fieldOfStudy = value; }
 
         public string Index { get => index; set => index = value; }
+
+        public Student() { }
 
         protected Student(string name, string surname, int age, string fieldOfStudy, string Index)
         {

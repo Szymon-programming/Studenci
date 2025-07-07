@@ -1,0 +1,295 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.WebSockets;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using Studenci.Models;
+using Studenci.Validators;
+using Studenci.Utils;
+
+
+namespace Studenci.Services
+{
+    public class StudentService
+    {
+        private List<Student> students = new();
+        public IndexValidator validator = new();
+
+        public void AddStudent()
+        {
+            Console.WriteLine("Typ studenta (dzienny/zaoczny)");
+            string type = Console.ReadLine().ToLower();
+            Student student;
+            while (true)
+            {
+                if (type == "zaoczny")
+                {
+                    student = new StudentZaoczny();
+                    break;
+                }
+                else if (type == "dzienny")
+                {
+                    student = new StudentDzienny();
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Podano zły typ");
+                }
+            }
+            string name;
+            while (true)
+            {
+                Console.Write("Podaj imie: ");
+                name = Console.ReadLine();
+                if (PersonValidator.IsValidName(name) == true)
+                {
+                    student.Name = name;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Niepoprawne imie, spóbuj ponownie.");
+                }
+            }
+            string surname;
+            while (true)
+            {
+                Console.Write("Podaj Nazwisko: ");
+                surname = Console.ReadLine();
+                if (PersonValidator.IsValidName(surname) == true)
+                {
+                    student.Surname = surname;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Niepoprawne nazwisko, spóbuj ponownie.");
+                }
+            }
+            int age;
+            Console.Write("Podaj wiek: ");
+            age = int.Parse(Console.ReadLine());
+            while (true)
+            {
+                if (age < 10 || age > 125)
+                {
+                    Console.WriteLine("Podano zły wiek spróbuj ponownie. ");
+                }
+                else
+                {
+                    student.Age = age;
+                    break;
+                }
+            }
+            string direction;
+            bool rightDirection = false;
+            do
+            {
+                Console.Write("Podaj kierunek: ");
+                direction = Console.ReadLine();
+                string directionWszystkieMale = direction.ToLower();
+                switch (directionWszystkieMale)
+                {
+                    case "informatyka":
+                        student.FieldOfStudy = "Informatyka";
+                        rightDirection = true;
+                        break;
+                    case "matematyka":
+                        student.FieldOfStudy = "Matematyka";
+                        rightDirection = true;
+                        break;
+                    case "biotechnologia":
+                        student.FieldOfStudy = "Biotechnologia";
+                        rightDirection = true;
+                        break;
+                    case "fizyka":
+                        student.FieldOfStudy = "Fizyka";
+                        rightDirection = true;
+                        break;
+                    default:
+                        Console.WriteLine("Podano zły direction, spróbuj ponownie.");
+                        break;
+                }
+            }
+            while (!rightDirection);
+            string index;
+            while (true)
+            {
+                Console.Write("Podaj indeks: ");
+                index = Console.ReadLine();
+                if (validator.TryAddIndex(index) == true)
+                {
+                    student.Index = index;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Podano zły indeks spróbuj ponownie.");
+                }
+            }
+
+            students.Add(student);
+            AutoSave();
+        }
+
+
+        //    public void AddStudent(Student student)
+        //    {
+        //        if(!students.Contains(student) && validator.TryAddIndex(student.Index) == true)
+        //        {
+        //            validator.TryAddIndex(student.Index);
+        //            students.Add(student);
+        //            AutoSave();
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"Student o numerze indeksu: {student.Index} jest już na liście!");
+        //        }
+        //    }
+
+        public void RemoveStudentByIndex(string index)
+        {
+            int howmuch = 0;
+            var ThisOne = students.Where(a => a.Index == index);
+
+            foreach (var item in ThisOne)
+            {
+                students.Remove(item);
+                Console.WriteLine($"Usunięto studenta o nmumerze indeksu {index}");
+                howmuch++;
+                AutoSave();
+                break;
+            }
+            if (howmuch == 0)
+            {
+                Console.WriteLine($"Student o numerze indeksu: {index} nie został odnaleziony!");
+            }
+        }
+
+        //    public void RemoveStudentFromDirectField(string Field)
+        //    {
+        //        students.RemoveAll(s => s.FieldOfStudy == Field);
+        //        Console.WriteLine($"Usunięto studentów z kierunku: {Field}");
+        //        AutoSave();
+        //    }
+
+        //    public void FindStudentByName(string name)
+        //    {
+        //        int HowMuch = 0;
+        //        foreach (Student student in students)
+        //        {
+        //            if (student.Name == name)
+        //            {
+        //                Console.WriteLine(student);
+        //                HowMuch++;
+        //            }
+        //        }
+        //        if(HowMuch == 0)
+        //        {
+        //            Console.WriteLine("Nie znaleziono żadnego studenta o podanym imieniu.");
+        //        }
+        //    }
+
+        //    public void FindStudentByIndex(string index)
+        //    {
+        //        int HowMuch = 0;
+        //        foreach (Student student in students)
+        //        {
+        //            if(student.Index == index)
+        //            {
+        //                Console.WriteLine(student);
+        //                HowMuch++;
+        //            }
+        //        }
+        //        if(HowMuch == 0)
+        //        {
+        //            Console.WriteLine("Nie znaleziono studenta o podanym indeksie.");
+        //        }
+        //    }
+
+        //    public void FindEveryOneOlderThan(int age)
+        //    {
+        //        var olderThan = students.Where(a => a.Age > age);
+
+        //        int howMuch = olderThan.Count();
+        //        if (howMuch > 0)
+        //        {
+        //            foreach (Student student in olderThan)
+        //            {
+        //                Console.WriteLine(student);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"Nie znaleziono studentów starszych niż {age} lat");
+        //        }
+        //    }
+
+        //    public int HowMuchStudentsWeHave()
+        //    {
+        //        var HowMuch = students.Count();
+        //        return HowMuch;
+        //    }
+
+        //    public double MiddleStudentsAge()
+        //    {
+        //        var StudentsMiddleAge = students.Average(a => a.Age);
+        //        return StudentsMiddleAge;
+        //    }
+
+        //    public void TheOldestAndYongestStudent()
+        //    {
+        //        var TheOldest = students.OrderByDescending(a => a.Age).FirstOrDefault();
+        //        var TheYongest = students.OrderBy(a => a.Age).FirstOrDefault();
+
+        //        Console.WriteLine(TheOldest);
+        //        Console.WriteLine(TheYongest);
+        //    }
+
+        //    public void WriteDwonAllStudents()
+        //    {
+        //        LoadFromJson("students.json", true);
+        //    }
+
+        //    public void SotrByField()
+        //    {
+        //        var sorted = students.OrderBy(a => a.FieldOfStudy).ToList();
+
+        //        foreach (Student student in sorted)
+        //        {
+        //            Console.WriteLine(student);
+        //        }
+        //    }
+
+        public void SaveToJson(string path)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters = { new StudentJsonConverter() }
+            };
+            var json = JsonSerializer.Serialize(students, options);
+            File.WriteAllText(path, json);
+        }
+
+        public void LoadFromJson(string path)
+        {
+            if (!File.Exists(path)) return;
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new StudentJsonConverter() }
+            };
+            var json = File.ReadAllText(path);
+            students = JsonSerializer.Deserialize<List<Student>>(json, options) ?? new();
+            foreach (var student in students)
+                validator.TryAddIndex(student.Index);
+        }
+
+        private void AutoSave() => SaveToJson("Student.json");
+    }
+}

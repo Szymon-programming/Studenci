@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Studenci.Models;
 
-namespace Studenci
+namespace Studenci.Validators
 {
     public class IndexValidator
     {
@@ -31,6 +32,11 @@ namespace Studenci
         public void LoadUsedIndexes(IEnumerable<Student> loadedStudents)
         {
             usedIndexes = new HashSet<string>(loadedStudents.Select(s => s.Index));
+        }
+
+        public void RemoveIndexWithStudent(string index)
+        {
+            usedIndexes.Remove(index);
         }
 
         public void ReturnUsedIndexes()

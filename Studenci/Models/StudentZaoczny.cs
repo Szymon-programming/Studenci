@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Studenci.Models
+{
+    public class StudentZaoczny : Student
+    {
+        public override string GetStudentType() => "Zaoczny";
+        
+    }
+}
