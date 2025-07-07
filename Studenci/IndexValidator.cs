@@ -28,6 +28,11 @@ namespace Studenci
             return usedIndexes;
         }
 
+        public void LoadUsedIndexes(IEnumerable<Student> loadedStudents)
+        {
+            usedIndexes = new HashSet<string>(loadedStudents.Select(s => s.Index));
+        }
+
         public void ReturnUsedIndexes()
         {
             Console.WriteLine("Zapisane indeksy:");

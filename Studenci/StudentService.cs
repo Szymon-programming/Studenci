@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Studenci
 {
@@ -111,22 +112,22 @@ namespace Studenci
         }
         public void AddStudent(Student student)
         {
-            if(!students.Contains(student) && validator.TryAddIndex(student.StudentIndex) == true)
+            if(!students.Contains(student) && validator.TryAddIndex(student.Index) == true)
             {
-                validator.TryAddIndex(student.StudentIndex);
+                validator.TryAddIndex(student.Index);
                 students.Add(student);
                 AutoSave();
             }
             else
             {
-                Console.WriteLine($"Student o numerze indeksu: {student.StudentIndex} jest już na liście!");
+                Console.WriteLine($"Student o numerze indeksu: {student.Index} jest już na liście!");
             }
         }
 
         public void RemoveStudentByIndex(string index)
         {
             int howmuch = 0;
-            var ThisOne = students.Where(a => a.StudentIndex == index);
+            var ThisOne = students.Where(a => a.Index == index);
 
             foreach (var item in ThisOne)
             {
@@ -171,7 +172,7 @@ namespace Studenci
             int HowMuch = 0;
             foreach (Student student in students)
             {
-                if(student.StudentIndex == index)
+                if(student.Index == index)
                 {
                     Console.WriteLine(student);
                     HowMuch++;
@@ -239,7 +240,11 @@ namespace Studenci
 
         public void SaveToJson(string path)
         {
-            var options = new JsonSerializerOptions {WriteIndented = true};
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters = { new StudentJsonConverter() }
+            };
             string json = JsonSerializer.Serialize(students, options);
             File.WriteAllText(path, json);
         }
@@ -248,10 +253,17 @@ namespace Studenci
         {
             if(File.Exists(path))
             {
+                var options = new JsonSerializerOptions
+                {
+                    Converters = { new StudentJsonConverter() }
+                };
                 string json = File.ReadAllText(path);
-                var loaded = JsonSerializer.Deserialize<List<Student>>(json);
-                if(loaded != null)
+                var loaded = JsonSerializer.Deserialize<List<Student>>(json, options);
+                if (loaded != null)
+                {
                     students = loaded;
+                    validator.LoadUsedIndexes(students);
+                }
             }
 
             if(doyouWantToWriteDown == true)

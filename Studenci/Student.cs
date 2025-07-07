@@ -7,33 +7,34 @@ using System.Threading.Tasks;
 
 namespace Studenci
 {
-    public class Student
+    public abstract class Student
     {
         private string name;
         private string surname;
         private int age;
         private string fieldOfStudy;
-        private string studentIndex;
+        private string index;
 
         public string Name { get => name; set => name = value; }
         public string Surname { get => surname; set => surname = value; }
         public int Age { get => age; set => age = value; }
         public string FieldOfStudy { get => fieldOfStudy; set => fieldOfStudy = value; }
 
-        public string StudentIndex { get => studentIndex; set => studentIndex = value; }
+        public string Index { get => index; set => index = value; }
 
-        public Student(string name, string surname, int age, string fieldOfStudy, string studentIndex)
+        protected Student(string name, string surname, int age, string fieldOfStudy, string Index)
         {
             Name = name;
             Surname = surname;
             Age = age;
             FieldOfStudy = fieldOfStudy;
-            StudentIndex = studentIndex;
+            Index = Index;
         }
 
+        public abstract string GetStudentType();
         public override string ToString()
         {
-            return $"[{StudentIndex}] {Name} {Surname} {Age} {FieldOfStudy}";
+            return $"[{Index}] {Name} {Surname}, {Age} lat, {FieldOfStudy} ({GetStudentType()})";
         }
     }
 }

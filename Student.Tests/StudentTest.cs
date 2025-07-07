@@ -28,7 +28,7 @@ namespace Student.Tests
             Assert.Equal(expectedSurname, student.Surname);
             Assert.Equal(expectedAge, student.Age);
             Assert.Equal(expectedFieldOfStudy, student.FieldOfStudy);
-            Assert.Equal(expectedIndex, student.StudentIndex);
+            Assert.Equal(expectedIndex, student.Index);
         }
 
         [Category("ToString")]
