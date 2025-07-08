@@ -19,13 +19,94 @@ namespace Studenci.Services
         private List<Student> students = new();
         public IndexValidator validator = new();
 
+        public void RemoveStudentByNameAndSurname()
+        {
+            Console.Write("Podaj imię studenta: ");
+            string name = Console.ReadLine();
+            var names = students.Where(a => a.Name == name);
+            int howMuch = names.Count();
+            if(howMuch == 0)
+            {
+                Console.WriteLine("Nie znaleziono studenta o podanym imieniu.");
+            }
+            else if(howMuch == 1)
+            {
+                Console.Write($"Czy chcesz usunąć studenta: ");
+                foreach (var student in names) Console.WriteLine(student);
+                string yesOrNo;
+                Console.Write(@"tak\nie: ");
+                yesOrNo = Console.ReadLine().ToLower();
+                switch (yesOrNo)
+                {
+                    case "tak":
+                        Console.Write($"Usunięto studenta: ");
+                        foreach (var student in names) Console.WriteLine(student);
+                        var toRemove = names.ToList();
+                        foreach (var item in toRemove)
+                        {
+                            students.Remove(item);
+                            validator.RemoveIndexWithStudent(item.Index);
+                        }
+                        break;
+                    case "no":
+                        break;
+                    default:
+                        Console.WriteLine("podano nie prawidłową wartość.");
+                        break;
+                }
+            }
+            else if(howMuch > 1)
+            {
+                Console.WriteLine("Musisz podać nazwisko studenta, ponieważ jest\n więcej niż jeden student o podanym imieniu");
+                Console.Write("Podaj nazwisko studenta: ");
+                string surname = Console.ReadLine();
+                var surnames = names.Where(a => a.Surname == surname);
+                int howMuchsurnames = surnames.Count();
+                if(howMuchsurnames == 0)
+                {
+                    Console.WriteLine("Nie znaleziono studenta o podanym nazwisku.");
+                }
+                else if(howMuchsurnames == 1)
+                {
+                    Console.Write($"Czy chcesz usunąć studenta: ");
+                    foreach (var student in surnames) Console.WriteLine(student);
+                    string yesOrNo;
+                    Console.Write(@"tak\nie: ");
+                    yesOrNo = Console.ReadLine().ToLower();
+                    switch (yesOrNo)
+                    {
+                        case "tak":
+                            Console.Write($"Usunięto studenta: ");
+                            foreach (var student in surnames) Console.WriteLine(student);
+                            var toRemove = surnames.ToList();
+                            foreach (var item in toRemove)
+                            {
+                                students.Remove(item);
+                                validator.RemoveIndexWithStudent(item.Index);
+                            }
+                            break;
+                        case "no":
+                            break;
+                        default:
+                            Console.WriteLine("podano nie prawidłową wartość.");
+                            break;
+                    }
+                }
+                else if(howMuchsurnames > 1)
+                {
+                    Console.WriteLine("wiecej niż jeden student o podanym imieniu i nazwisku, musisz podać index.");
+                    string index = Console.ReadLine();
+                    RemoveStudentByIndex(index);
+                }
+            }
+        }
         public void AddStudent()
         {
-            Console.WriteLine("Typ studenta (dzienny/zaoczny)");
-            string type = Console.ReadLine().ToLower();
             Student student;
             while (true)
             {
+                Console.WriteLine("Typ studenta (dzienny/zaoczny): ");
+                string type = Console.ReadLine().ToLower();
                 if (type == "zaoczny")
                 {
                     student = new StudentZaoczny();
@@ -112,7 +193,7 @@ namespace Studenci.Services
                         rightDirection = true;
                         break;
                     default:
-                        Console.WriteLine("Podano zły direction, spróbuj ponownie.");
+                        Console.WriteLine("Podano zły kierunek, spróbuj ponownie.");
                         break;
                 }
             }
@@ -125,6 +206,7 @@ namespace Studenci.Services
                 if (validator.TryAddIndex(index) == true)
                 {
                     student.Index = index;
+                    validator.TryAddIndex(index);
                     break;
                 }
                 else
@@ -134,7 +216,7 @@ namespace Studenci.Services
             }
 
             students.Add(student);
-            AutoSave();
+            //AutoSave();
         }
 
 
@@ -162,7 +244,7 @@ namespace Studenci.Services
                 students.Remove(item);
                 Console.WriteLine($"Usunięto studenta o nmumerze indeksu {index}");
                 howmuch++;
-                AutoSave();
+                //AutoSave();
                 break;
             }
             if (howmuch == 0)
@@ -251,10 +333,14 @@ namespace Studenci.Services
         //        Console.WriteLine(TheYongest);
         //    }
 
-        //    public void WriteDwonAllStudents()
-        //    {
-        //        LoadFromJson("students.json", true);
-        //    }
+        public void WriteDwonAllStudents()
+        {
+            //LoadFromJson("Student.json");
+            foreach (var item in students)
+            {
+                Console.WriteLine(item);
+            }
+        }
 
         //    public void SotrByField()
         //    {
@@ -266,30 +352,30 @@ namespace Studenci.Services
         //        }
         //    }
 
-        public void SaveToJson(string path)
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Converters = { new StudentJsonConverter() }
-            };
-            var json = JsonSerializer.Serialize(students, options);
-            File.WriteAllText(path, json);
-        }
+        //public void SaveToJson(string path)
+        //{
+        //    var options = new JsonSerializerOptions
+        //    {
+        //        WriteIndented = true,
+        //        Converters = { new StudentJsonConverter() }
+        //    };
+        //    var json = JsonSerializer.Serialize(students, options);
+        //    File.WriteAllText(path, json);
+        //}
 
-        public void LoadFromJson(string path)
-        {
-            if (!File.Exists(path)) return;
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new StudentJsonConverter() }
-            };
-            var json = File.ReadAllText(path);
-            students = JsonSerializer.Deserialize<List<Student>>(json, options) ?? new();
-            foreach (var student in students)
-                validator.TryAddIndex(student.Index);
-        }
+        //public void LoadFromJson(string path)
+        //{
+        //    if (!File.Exists(path)) return;
+        //    var options = new JsonSerializerOptions
+        //    {
+        //        Converters = { new StudentJsonConverter() }
+        //    };
+        //    var json = File.ReadAllText(path);
+        //    students = JsonSerializer.Deserialize<List<Student>>(json, options) ?? new();
+        //    foreach (var student in students)
+        //        validator.TryAddIndex(student.Index);
+        //}
 
-        private void AutoSave() => SaveToJson("Student.json");
+        //private void AutoSave() => SaveToJson("Student.json");
     }
 }

@@ -9,8 +9,14 @@ namespace Studenci.Services
 {
     public class ChoiceService
     {
-        private readonly StudentService service = new();
-        private readonly IndexValidator validator = new();
+        private StudentService service;
+        private IndexValidator validator;
+
+        public ChoiceService(StudentService service, IndexValidator validator)
+        {
+            this.service = service;
+            this.validator = validator;
+        }
         public void RemoveChoice()
         {
             Console.WriteLine("1. Usuń studenta po imieniu i nazwisku");
@@ -21,13 +27,13 @@ namespace Studenci.Services
             switch(choice)
             {
                 case "1":
-
+                    service.RemoveStudentByNameAndSurname();
                     break;
                 case "2":
                     Console.Write("Podaj indeks: ");
                     string index = Console.ReadLine();
                     bool valid = validator.TryAddIndex(index);
-                    if (valid == true)
+                    if(valid == false)
                     {
                         service.RemoveStudentByIndex(index);
                         validator.RemoveIndexWithStudent(index);
