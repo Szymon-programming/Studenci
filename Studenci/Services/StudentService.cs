@@ -14,10 +14,23 @@ using Studenci.Utils;
 
 namespace Studenci.Services
 {
-    public class StudentService
+
+    public interface IServicable
+    {
+        public void SortByName();
+        public void SortBySurname();
+        public void SortByAge();
+
+        public void SortByField();
+
+        public void SortByType();
+    }
+    public class StudentService : IServicable
     {
         private List<Student> students = new();
         public IndexValidator validator = new();
+        private int howMuchDziennych;
+        private int howMuchZaocznych;
 
         public void RemoveStudentByNameAndSurname()
         {
@@ -219,21 +232,6 @@ namespace Studenci.Services
             //AutoSave();
         }
 
-
-        //    public void AddStudent(Student student)
-        //    {
-        //        if(!students.Contains(student) && validator.TryAddIndex(student.Index) == true)
-        //        {
-        //            validator.TryAddIndex(student.Index);
-        //            students.Add(student);
-        //            AutoSave();
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Student o numerze indeksu: {student.Index} jest już na liście!");
-        //        }
-        //    }
-
         public void RemoveStudentByIndex(string index)
         {
             int howmuch = 0;
@@ -253,87 +251,92 @@ namespace Studenci.Services
             }
         }
 
-        //    public void RemoveStudentFromDirectField(string Field)
-        //    {
-        //        students.RemoveAll(s => s.FieldOfStudy == Field);
-        //        Console.WriteLine($"Usunięto studentów z kierunku: {Field}");
-        //        AutoSave();
-        //    }
+        public void FindStudentByName(string name)
+        {
+            int HowMuch = 0;
+            foreach (Student student in students)
+            {
+                if (student.Name == name)
+                {
+                    Console.WriteLine(student);
+                    HowMuch++;
+                }
+            }
+            if (HowMuch == 0)
+            {
+                Console.WriteLine("Nie znaleziono żadnego studenta o podanym imieniu.");
+            }
+        }
 
-        //    public void FindStudentByName(string name)
-        //    {
-        //        int HowMuch = 0;
-        //        foreach (Student student in students)
-        //        {
-        //            if (student.Name == name)
-        //            {
-        //                Console.WriteLine(student);
-        //                HowMuch++;
-        //            }
-        //        }
-        //        if(HowMuch == 0)
-        //        {
-        //            Console.WriteLine("Nie znaleziono żadnego studenta o podanym imieniu.");
-        //        }
-        //    }
+        public void FindStudentBySurname(string surname)
+        {
+            int HowMuch = 0;
+            foreach (Student student in students)
+            {
+                if (student.Surname == surname)
+                {
+                    Console.WriteLine(student);
+                    HowMuch++;
+                }
+            }
+            if (HowMuch == 0)
+            {
+                Console.WriteLine("Nie znaleziono żadnego studenta o podanym nazwisku.");
+            }
+        }
 
-        //    public void FindStudentByIndex(string index)
-        //    {
-        //        int HowMuch = 0;
-        //        foreach (Student student in students)
-        //        {
-        //            if(student.Index == index)
-        //            {
-        //                Console.WriteLine(student);
-        //                HowMuch++;
-        //            }
-        //        }
-        //        if(HowMuch == 0)
-        //        {
-        //            Console.WriteLine("Nie znaleziono studenta o podanym indeksie.");
-        //        }
-        //    }
+        public void FindStudentByIndex(string index)
+        {
+            int HowMuch = 0;
+            foreach (Student student in students)
+            {
+                if (student.Index == index)
+                {
+                    Console.WriteLine(student);
+                    HowMuch++;
+                }
+            }
+            if (HowMuch == 0)
+            {
+                Console.WriteLine("Nie znaleziono studenta o podanym indeksie.");
+            }
+        }
 
-        //    public void FindEveryOneOlderThan(int age)
-        //    {
-        //        var olderThan = students.Where(a => a.Age > age);
+        public double MiddleStudentsAge()
+        {
+            var StudentsMiddleAge = students.Average(a => a.Age);
+            return StudentsMiddleAge;
+        }
 
-        //        int howMuch = olderThan.Count();
-        //        if (howMuch > 0)
-        //        {
-        //            foreach (Student student in olderThan)
-        //            {
-        //                Console.WriteLine(student);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Nie znaleziono studentów starszych niż {age} lat");
-        //        }
-        //    }
+        public void TheOldestAndYongestStudent()
+        {
+            var TheOldest = students.OrderByDescending(a => a.Age).FirstOrDefault();
+            var TheYongest = students.OrderBy(a => a.Age).FirstOrDefault();
 
-        //    public int HowMuchStudentsWeHave()
-        //    {
-        //        var HowMuch = students.Count();
-        //        return HowMuch;
-        //    }
+            Console.WriteLine(TheOldest);
+            Console.WriteLine(TheYongest);
+        }
 
-        //    public double MiddleStudentsAge()
-        //    {
-        //        var StudentsMiddleAge = students.Average(a => a.Age);
-        //        return StudentsMiddleAge;
-        //    }
+        public void HowMuchStudentsOnDirectField()
+        {
+            var studentsOnIT = students.Where(a => a.FieldOfStudy == "Informatyka");
 
-        //    public void TheOldestAndYongestStudent()
-        //    {
-        //        var TheOldest = students.OrderByDescending(a => a.Age).FirstOrDefault();
-        //        var TheYongest = students.OrderBy(a => a.Age).FirstOrDefault();
+            Console.WriteLine($"Informatyka: {studentsOnIT.Count()}");
 
-        //        Console.WriteLine(TheOldest);
-        //        Console.WriteLine(TheYongest);
-        //    }
+            var studentsOnPhysics = students.Where(a => a.FieldOfStudy == "Fizyka");
 
-        public void WriteDwonAllStudents()
+            Console.WriteLine($"Fizyka: {studentsOnPhysics.Count()}");
+
+            var studentsOnMathematica = students.Where(a => a.FieldOfStudy == "Matematyka");
+
+            Console.WriteLine($"Matematyka: {studentsOnMathematica.Count()}");
+
+            var studentsOnBiotechnology = students.Where(a => a.FieldOfStudy == "Biotechnologia");
+
+            Console.WriteLine($"Biotechnologia: {studentsOnBiotechnology.Count()}");
+        }
+
+            public void WriteDwonAllStudents()
         {
             //LoadFromJson("Student.json");
             foreach (var item in students)
@@ -342,15 +345,65 @@ namespace Studenci.Services
             }
         }
 
-        //    public void SotrByField()
-        //    {
-        //        var sorted = students.OrderBy(a => a.FieldOfStudy).ToList();
+        public void SortByField()
+        {
+            var sorted = students.OrderBy(a => a.FieldOfStudy).ToList();
 
-        //        foreach (Student student in sorted)
-        //        {
-        //            Console.WriteLine(student);
-        //        }
-        //    }
+            foreach (Student student in sorted)
+            {
+                Console.WriteLine(student);
+            }
+        }
+
+        public void SortByName()
+        {
+            var nameSort = students.OrderBy(a => a.Name);
+
+            foreach (var item in nameSort)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        public void SortBySurname()
+        {
+            var surnameSort = students.OrderBy(a => a.Surname);
+
+            foreach (var item in surnameSort)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        public void CountStudentsByType()
+        {
+            int dzienni = students.Count(s => s is StudentDzienny);
+            int zaoczni = students.Count(s => s is StudentZaoczny);
+
+            Console.WriteLine($"Studenci dzienni: {dzienni}");
+            Console.WriteLine($"Studenci zaoczni: {zaoczni}");
+        }
+
+        public void SortByAge()
+        {
+            var ageSort = students.OrderBy(a => a.Age);
+
+            foreach (var item in ageSort)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        //wrócić i ogarnąć jak to zrobić
+        public void SortByType()
+        {
+            var sortedByType = students.OrderBy(s => s is StudentDzienny ? 0 : 1).ThenBy(s => s.Surname);
+
+            foreach (var item in sortedByType)
+            {
+                Console.WriteLine(item);
+            }
+        }
 
         //public void SaveToJson(string path)
         //{

@@ -39,8 +39,8 @@ namespace Studenci.UI
         {
 
             //service.LoadFromJson("Student.json");
-
-            while (true)
+            bool theEnd = false;
+            while (theEnd == false)
             {
                 ShowMenu();
                 string choice = Console.ReadLine();
@@ -55,6 +55,22 @@ namespace Studenci.UI
                         break;
                     case "3":
                         chooser.RemoveChoice();
+                        break;
+                    case "4":
+                        chooser.SortChoice();
+                        break;
+                    case "5":
+                        chooser.StatChoice();
+                        break;
+                    case "6":
+                        chooser.FindStudentChoice();
+                        break;
+                    case "7":
+                        Console.WriteLine("Zamykanie programu");
+                        theEnd = true;
+                        break;
+                    default:
+                        Console.WriteLine("Podano złą wartość.");
                         break;
                 }
             }
