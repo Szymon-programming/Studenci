@@ -38,7 +38,7 @@ namespace Studenci.UI
         public void Run()
         {
 
-            //service.LoadFromJson("Student.json");
+            service.LoadFromJson();
             bool theEnd = false;
             while (theEnd == false)
             {
@@ -52,9 +52,11 @@ namespace Studenci.UI
                         break;
                     case "2":
                         service.AddStudent();
+                        service.SaveToJson();
                         break;
                     case "3":
                         chooser.RemoveChoice();
+                        service.SaveToJson();
                         break;
                     case "4":
                         chooser.SortChoice();

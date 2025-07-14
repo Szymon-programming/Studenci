@@ -28,6 +28,7 @@ namespace Studenci.Services
     public class StudentService : IServicable
     {
         private List<Student> students = new();
+        private readonly string filePath = "Studenci.json";
         public IndexValidator validator = new();
         private int howMuchDziennych;
         private int howMuchZaocznych;
@@ -394,7 +395,6 @@ namespace Studenci.Services
             }
         }
 
-        //wrócić i ogarnąć jak to zrobić
         public void SortByType()
         {
             var sortedByType = students.OrderBy(s => s is StudentDzienny ? 0 : 1).ThenBy(s => s.Surname);
@@ -405,30 +405,31 @@ namespace Studenci.Services
             }
         }
 
-        //public void SaveToJson(string path)
-        //{
-        //    var options = new JsonSerializerOptions
-        //    {
-        //        WriteIndented = true,
-        //        Converters = { new StudentJsonConverter() }
-        //    };
-        //    var json = JsonSerializer.Serialize(students, options);
-        //    File.WriteAllText(path, json);
-        //}
+        public void LoadFromJson()
+        {
+            if (File.Exists(filePath))
+            {
+                var options = new JsonSerializerOptions
+                {
+                    Converters = { new StudentJsonConverter() },
+                    PropertyNameCaseInsensitive = true
+                };
 
-        //public void LoadFromJson(string path)
-        //{
-        //    if (!File.Exists(path)) return;
-        //    var options = new JsonSerializerOptions
-        //    {
-        //        Converters = { new StudentJsonConverter() }
-        //    };
-        //    var json = File.ReadAllText(path);
-        //    students = JsonSerializer.Deserialize<List<Student>>(json, options) ?? new();
-        //    foreach (var student in students)
-        //        validator.TryAddIndex(student.Index);
-        //}
+                string json = File.ReadAllText(filePath);
+                students = JsonSerializer.Deserialize<List<Student>>(json, options) ?? new List<Student>();
+            }
+        }
 
-        //private void AutoSave() => SaveToJson("Student.json");
+        public void SaveToJson()
+        {
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new StudentJsonConverter() },
+                WriteIndented = true
+            };
+
+            string json = JsonSerializer.Serialize(students, options);
+            File.WriteAllText(filePath, json);
+        }
     }
 }

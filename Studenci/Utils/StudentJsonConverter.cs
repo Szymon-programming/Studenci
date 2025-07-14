@@ -15,15 +15,21 @@ namespace Studenci.Utils
     {
         public override Student Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            using var doc = JsonDocument.ParseValue(ref reader);
-            var type = doc.RootElement.GetProperty("Type").GetString();
-            var json = doc.RootElement.GetRawText();
+            using JsonDocument document = JsonDocument.ParseValue(ref reader);
+            JsonElement root = document.RootElement;
+
+            if (!root.TryGetProperty("Type", out JsonElement typeElement))
+            {
+                throw new JsonException("Brak pola 'Type' przy deserializacji.");
+            }
+
+            string type = typeElement.GetString().ToLower();
 
             return type switch
             {
-                "Dzienny" => JsonSerializer.Deserialize<StudentDzienny>(json, options),
-                "Zaoczny" => JsonSerializer.Deserialize<StudentZaoczny>(json, options),
-                _ => throw new NotSupportedException($"Nieobsługiwany typ studenta: {type}")
+                "dzienny" => JsonSerializer.Deserialize<StudentDzienny>(root.GetRawText(), options),
+                "zaoczny" => JsonSerializer.Deserialize<StudentZaoczny>(root.GetRawText(), options),
+                _ => throw new JsonException($"Nieznany typ studenta: {type}")
             };
         }
 

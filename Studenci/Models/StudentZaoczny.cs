@@ -8,7 +8,7 @@ namespace Studenci.Models
 {
     public class StudentZaoczny : Student
     {
-        public override string GetStudentType() => "Zaoczny";
+        public override string Type => "Zaoczny";
         
     }
 }

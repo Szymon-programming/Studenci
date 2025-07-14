@@ -8,6 +8,6 @@ namespace Studenci.Models
 {
     public class StudentDzienny: Student
     {
-        public override string GetStudentType() => "Dzienny";
+        public override string Type => "Dzienny";
     }
 }
