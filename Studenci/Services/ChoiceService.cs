@@ -46,6 +46,9 @@ namespace Studenci.Services
                         Console.WriteLine("Nie znaleziono podanego indeksu");
                         break;
                     }
+                default:
+                    Console.WriteLine("Podano zła wartość");
+                    break;
             }
         }
 
@@ -92,7 +95,8 @@ namespace Studenci.Services
             switch (choice)
             {
                 case "1":
-                    service.MiddleStudentsAge();
+                    double averageAge = service.MiddleStudentsAge();
+                    Console.WriteLine($"Sredni wiek studentów wynosi: {averageAge}");
                     break;
                 case "2":
                     service.TheOldestAndYongestStudent();

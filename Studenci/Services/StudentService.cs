@@ -306,6 +306,7 @@ namespace Studenci.Services
         public double MiddleStudentsAge()
         {
             var StudentsMiddleAge = students.Average(a => a.Age);
+
             return StudentsMiddleAge;
         }
 

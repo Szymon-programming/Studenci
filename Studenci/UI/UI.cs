@@ -48,30 +48,39 @@ namespace Studenci.UI
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
                         service.WriteDwonAllStudents();
+                        Console.WriteLine();
                         break;
                     case "2":
+                        Console.Clear();
                         service.AddStudent();
                         service.SaveToJson();
                         break;
                     case "3":
+                        Console.Clear();
                         chooser.RemoveChoice();
                         service.SaveToJson();
                         break;
                     case "4":
+                        Console.Clear();
                         chooser.SortChoice();
                         break;
                     case "5":
+                        Console.Clear();
                         chooser.StatChoice();
                         break;
                     case "6":
+                        Console.Clear();
                         chooser.FindStudentChoice();
                         break;
                     case "7":
+                        Console.Clear();
                         Console.WriteLine("Zamykanie programu");
                         theEnd = true;
                         break;
                     default:
+                        Console.Clear();
                         Console.WriteLine("Podano złą wartość.");
                         break;
                 }
