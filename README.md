@@ -34,15 +34,6 @@ StudentManager to aplikacja konsolowa w języku C#, która umożliwia zarządzan
 - Programowanie obiektowe (dziedziczenie, interfejsy)
 - LINQ
 
-### ▶️ Jak uruchomić
-
-```bash
-git clone https://github.com/Szymon-programming/StudentManager-ConsoleApp.git
-cd StudentManager-ConsoleApp
-dotnet run
-
-------------------🇬🇧--------------------
-
 ## 📌 Description
 
 StudentManager is a C# console application for managing a list of students. It allows adding, removing, searching, and sorting students. Data is stored in a JSON file with support for class inheritance (daily and part-time students).
@@ -71,6 +62,13 @@ StudentManager is a C# console application for managing a list of students. It a
 - Object-Oriented Programming (inheritance, interfaces)
 - `System.Text.Json`
 - LINQ
+- 
+### ▶️ Jak uruchomić
+
+```bash
+git clone https://github.com/Szymon-programming/StudentManager-ConsoleApp.git
+cd StudentManager-ConsoleApp
+dotnet run
 
 ## ▶️ How to Run
 
