@@ -339,7 +339,6 @@ namespace Studenci.Services
 
             public void WriteDwonAllStudents()
         {
-            //LoadFromJson("Student.json");
             foreach (var item in students)
             {
                 Console.WriteLine(item);

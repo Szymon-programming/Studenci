@@ -46,66 +46,120 @@ namespace Studenci.Services
                         Console.WriteLine("Nie znaleziono podanego indeksu");
                         break;
                     }
+                default:
+                    Console.WriteLine("Podano nieprawidłową wartość");
+                    return;
             }
         }
 
         public void SortChoice()
         {
-            Console.WriteLine("1. Posortuj po imieniu");
-            Console.WriteLine("2. Posortuj po nazwisku");
-            Console.WriteLine("3. Posortuj po wieku");
-            Console.WriteLine("4. Posortuj po kierunku");
-            Console.WriteLine("5. Posortuj po typie studiów");
-            string choice = Console.ReadLine();
-            switch (choice)
+            bool doYouWantToContinue = true;
+            while (doYouWantToContinue == true)
             {
-                case "1":
-                    service.SortByName();
-                    break;
-                case "2":
-                    service.SortBySurname();
-                    break;
-                case "3":
-                    service.SortByAge();
-                    break;
-                case "4":
-                    service.SortByField();
-                    break;
-                case "5":
-                    service.SortByType();
-                    break;
-                default:
+                Console.WriteLine("1. Posortuj po imieniu");
+                Console.WriteLine("2. Posortuj po nazwisku");
+                Console.WriteLine("3. Posortuj po wieku");
+                Console.WriteLine("4. Posortuj po kierunku");
+                Console.WriteLine("5. Posortuj po typie studiów");
+                Console.Write("Wybór: ");
+                string choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        service.SortByName();
+                        break;
+                    case "2":
+                        Console.Clear();
+                        service.SortBySurname();
+                        break;
+                    case "3":
+                        Console.Clear();
+                        service.SortByAge();
+                        break;
+                    case "4":
+                        Console.Clear();
+                        service.SortByField();
+                        break;
+                    case "5":
+                        Console.Clear();
+                        service.SortByType();
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Podano złą wartość!");
+                        return;
+                }
+                Console.WriteLine("Czy chcesz sortować dalej?");
+                Console.Write("tak/nie: ");
+                string yesNo = Console.ReadLine().ToLower();
+                if (yesNo == "tak")
+                {
+                    doYouWantToContinue = true;
+                }
+                else if (yesNo == "nie")
+                {
+                    doYouWantToContinue = false;
+                }
+                else
+                {
                     Console.WriteLine("Podano złą wartość!");
-                    break;
+                }
             }
         }
 
         public void StatChoice()
         {
-            Console.WriteLine("1. Średnia wieku");
-            Console.WriteLine("2. Najstarszy najmłodszy student");
-            Console.WriteLine("3. ile osób na kierunku");
-            Console.WriteLine("4. ilu sudentów dziennych, ilu zaocznych");
-
-            string choice = Console.ReadLine();
-
-            switch (choice)
+            bool doYouWantToContinue = true;
+            while (doYouWantToContinue == true)
             {
-                case "1":
-                    service.MiddleStudentsAge();
-                    break;
-                case "2":
-                    service.TheOldestAndYongestStudent();
-                    break;
-                case "3":
-                    service.HowMuchStudentsOnDirectField();
-                    break;
-                case "4":
-                    service.CountStudentsByType();
-                    break;
-                default:
+                Console.WriteLine("1. Średnia wieku");
+                Console.WriteLine("2. Najstarszy najmłodszy student");
+                Console.WriteLine("3. ile osób na kierunku");
+                Console.WriteLine("4. ilu sudentów dziennych, ilu zaocznych");
+                Console.Write("Wybór: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        double avarageAge = service.MiddleStudentsAge();
+                        Console.WriteLine($"Średni wiek studentów wynosi: {avarageAge}");
+                        break;
+                    case "2":
+                        Console.Clear();
+                        service.TheOldestAndYongestStudent();
+                        break;
+                    case "3":
+                        Console.Clear();
+                        service.HowMuchStudentsOnDirectField();
+                        break;
+                    case "4":
+                        Console.Clear();
+                        service.CountStudentsByType();
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Podano złą wartość!");
+                        return;
+                }
+                Console.WriteLine("Czy chcesz dalej przeglądać statystyki?");
+                Console.Write("tak/nie: ");
+                string yesNo = Console.ReadLine().ToLower();
+                if(yesNo == "tak")
+                {
+                    doYouWantToContinue = true;
+                }
+                else if(yesNo == "nie")
+                {
+                    doYouWantToContinue = false;
+                }
+                else
+                {
                     Console.WriteLine("Podano złą wartość!");
-                    break;
+                }
             }
         }
 
@@ -113,7 +167,7 @@ namespace Studenci.Services
         {
             Console.WriteLine("1. Wyszukaj studenta po imieniu lub nazwisku");
             Console.WriteLine("2. Wyszukaj studenta po indeksie");
-
+            Console.Write("Wybór: ");
             string choice = Console.ReadLine();
 
             switch (choice)
@@ -121,6 +175,7 @@ namespace Studenci.Services
                 case "1":
                     Console.WriteLine("1. Wyszukaj po imieniu");
                     Console.WriteLine("2. Wyszukaj po nazwisku");
+                    Console.Write("Wybór: ");
                     string nameOrSurname = Console.ReadLine();
                     switch (nameOrSurname)
                     {
@@ -146,7 +201,7 @@ namespace Studenci.Services
                     break;
                 default:
                     Console.WriteLine("Podano złą warość!");
-                    break;
+                    return;
             }
         }
     }

@@ -42,6 +42,7 @@ namespace Studenci.UI
             bool theEnd = false;
             while (theEnd == false)
             {
+                Console.Clear();
                 ShowMenu();
                 string choice = Console.ReadLine();
 
@@ -49,23 +50,73 @@ namespace Studenci.UI
                 {
                     case "1":
                         service.WriteDwonAllStudents();
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                     case "2":
-                        service.AddStudent();
+                        bool doYouWantToAddNext = true;
+                        while (doYouWantToAddNext == true)
+                        {
+                            service.AddStudent();
+                            Console.WriteLine("Czy chcesz dodać kolejnego studenta?");
+                            Console.WriteLine("tak/nie");
+                            string yesNo = Console.ReadLine().ToLower();
+                            if(yesNo == "tak")
+                            {
+                                doYouWantToAddNext = true;
+                            }
+                            else if(yesNo == "nie")
+                            {
+                                doYouWantToAddNext = false;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Podano złą wartość");
+                            }
+                        }
                         service.SaveToJson();
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                     case "3":
-                        chooser.RemoveChoice();
+                        bool doYouWantToRemoveNext = true;
+                        while (doYouWantToRemoveNext == true)
+                        {
+                            chooser.RemoveChoice();
+                            Console.WriteLine("Czy chcesz usunąć kolejnego studenta?");
+                            Console.WriteLine("tak/nie");
+                            string yesNo = Console.ReadLine().ToLower();
+                            if (yesNo == "tak")
+                            {
+                                doYouWantToRemoveNext = true;
+                            }
+                            else if (yesNo == "nie")
+                            {
+                                doYouWantToRemoveNext = false;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Podano złą wartość");
+                            }
+                        }
                         service.SaveToJson();
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                     case "4":
                         chooser.SortChoice();
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                     case "5":
                         chooser.StatChoice();
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                     case "6":
                         chooser.FindStudentChoice();
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                     case "7":
                         Console.WriteLine("Zamykanie programu");
@@ -73,6 +124,8 @@ namespace Studenci.UI
                         break;
                     default:
                         Console.WriteLine("Podano złą wartość.");
+                        Console.WriteLine("Naciśnij Enter aby kontynuować");
+                        Console.ReadKey();
                         break;
                 }
             }
