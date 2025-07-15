@@ -49,6 +49,7 @@ namespace Studenci.UI
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
                         service.WriteDwonAllStudents();
                         Console.WriteLine("Naciśnij Enter aby kontynuować");
                         Console.ReadKey();
@@ -104,25 +105,30 @@ namespace Studenci.UI
                         Console.ReadKey();
                         break;
                     case "4":
+                        Console.Clear();
                         chooser.SortChoice();
                         Console.WriteLine("Naciśnij Enter aby kontynuować");
                         Console.ReadKey();
                         break;
                     case "5":
+                        Console.Clear();
                         chooser.StatChoice();
                         Console.WriteLine("Naciśnij Enter aby kontynuować");
                         Console.ReadKey();
                         break;
                     case "6":
+                        Console.Clear();
                         chooser.FindStudentChoice();
                         Console.WriteLine("Naciśnij Enter aby kontynuować");
                         Console.ReadKey();
                         break;
                     case "7":
+                        Console.Clear();
                         Console.WriteLine("Zamykanie programu");
                         theEnd = true;
                         break;
                     default:
+                        Console.Clear();
                         Console.WriteLine("Podano złą wartość.");
                         Console.WriteLine("Naciśnij Enter aby kontynuować");
                         Console.ReadKey();
