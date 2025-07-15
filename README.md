@@ -3,6 +3,7 @@
 ## 🇵🇱 Wersja polska
 ## 🇬🇧 English version below 
 
+[Planowana rozbudowa frontendu]
 ### 📌 Opis
 
 StudentManager to aplikacja konsolowa w języku C#, która umożliwia zarządzanie listą studentów. Program wspiera operacje dodawania, usuwania, wyszukiwania i sortowania studentów. Dane są przechowywane w pliku JSON z obsługą dziedziczenia klas.
